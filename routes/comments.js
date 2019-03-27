@@ -71,18 +71,6 @@ router.put("/:comment_id", checkCommentOwnership, (req, res) => {
 
 // COMMENT DESTROY ROUTE
 
-// does not remove id from Campground in Mongo
-// router.delete("/:comment_id", checkCommentOwnership, (req, res) => {
-//     Comment.findByIdAndRemove(req.params.comment_id, (err) => {
-//         if (err) {
-//             res.redirect("back");            
-//         }
-//         else {
-//             res.redirect("/campgrounds/" + req.params.id);
-//         }
-//     })
-// });
-
 // allows removal of comment ID from Campground
 router.delete("/:comment_id", checkCommentOwnership, (req, res) => {
     Comment.findById(req.params.comment_id, (err, comment) => {
