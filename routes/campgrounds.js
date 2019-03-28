@@ -19,7 +19,6 @@ router.get("/", (req, res) => {
 
 // New Route
 router.get("/new", middleware.isLoggedIn, (req, res) => {
-    // may need to be turned into new.ejs
     res.render("campgrounds/new"); 
 });
 
@@ -36,6 +35,7 @@ router.post("/", middleware.isLoggedIn, (req, res) => {
        id: req.user._id,
        username: req.user.username
    };
+   
    var newCampground = {name: name, image: image, description: desc, author: author};
    
    // create campground and save to database
@@ -43,7 +43,7 @@ router.post("/", middleware.isLoggedIn, (req, res) => {
        if (err) {
            console.log(err);
        } else {
-            // redirect back to campgrounds page
+            req.flash("success", "Your contribution to the campground collective is acknowledged");
             res.redirect("/campgrounds");
        }
    });
