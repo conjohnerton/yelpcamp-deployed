@@ -10,17 +10,21 @@ router.get("/", (req, res) => {
 
 // Show register form
 router.get("/register", (req, res) => {
-    res.render("register");
+    res.render("register", {page: "register"});
 });
 
 // handle registration logic
 router.post("/register", (req, res) => {
     var newUser = new User({username: req.body.username});
     
+    if (req.body.adminCode === "secretcode123") {
+        newUser.isAdmin = true;    
+    }
+    
     User.register(newUser, req.body.password, (err, user) => {
        if (err) {
-           req.flash("error", err.message);
-           res.render("register");
+           console.log(err);
+           return res.render("register", {error: err.message});
        }
        
        passport.authenticate("local")(req, res, () => {
@@ -32,7 +36,7 @@ router.post("/register", (req, res) => {
 
 // Show login form
 router.get("/login", (req, res) => {
-   res.render("login"); 
+   res.render("login", {page: "login"}); 
 });
 
 // Post login authentication
