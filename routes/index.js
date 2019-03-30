@@ -17,9 +17,9 @@ router.get("/register", (req, res) => {
 router.post("/register", (req, res) => {
     var newUser = new User({username: req.body.username});
     
-    if (req.body.adminCode === "secretcode123") {
-        newUser.isAdmin = true;    
-    }
+    // if (req.body.adminCode === "secretcode123") {
+    //     newUser.isAdmin = true;    
+    // }
     
     User.register(newUser, req.body.password, (err, user) => {
        if (err) {
@@ -32,6 +32,31 @@ router.post("/register", (req, res) => {
           res.redirect("/campgrounds"); 
        });
     });
+});
+
+// Show Admit register form
+router.get("/registerAdmin", (req, res) => {
+   res.render("registerAdmin");
+});
+
+router.post("/registerAdmin", (req, res) => {
+   var newUser = new User({username: req.body.username});
+   
+   if (req.body.adminCode === "secretcode123") {
+       newUser.isAdmin = true;
+   }
+   
+   User.register(newUser, req.body.password, (err, user) => {
+        if (err) {
+        console.log(err);
+        return res.render("register", {error: err.message});
+        } 
+   
+        passport.authenticate("local")(req, res, () => {
+          req.flash("success", "Welcome to YelpCamp " + user.username + "!");
+          res.redirect("/campgrounds");
+        });
+   });
 });
 
 // Show login form
