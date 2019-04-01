@@ -10,7 +10,11 @@ var express         = require("express"),
     methodOverride  = require("method-override"),
     LocalStrategy   = require("passport-local"),
     expressSession  = require("express-session"),
-    Campground      = require("./models/campground"),
+    async           = require("async"),
+    nodemailer      = require("nodemailer"),
+    crypto          = require("crypto");
+
+var Campground      = require("./models/campground"),
     User            = require("./models/user"),
     Comment         = require("./models/comment");
 
