@@ -18,7 +18,7 @@ router.get("/register", (req, res) => {
 
 // handle registration logic
 router.post("/register", (req, res) => {
-    var newUser = new User({username: req.body.username});
+    var newUser = new User({username: req.body.username, email: req.body.email});
     
     User.register(newUser, req.body.password, (err, user) => {
        if (err) {
@@ -39,7 +39,7 @@ router.get("/registerAdmin", (req, res) => {
 });
 
 router.post("/registerAdmin", (req, res) => {
-   var newUser = new User({username: req.body.username});
+   var newUser = new User({username: req.body.username, email: req.body.email});
    
    if (req.body.adminCode === "secretcode123") {
        newUser.isAdmin = true;
@@ -112,16 +112,16 @@ router.post("/forgot" , (req, res, next) => {
         function createMailObject(token, user, done) {
             // create mailer object
             var smtpTransport = nodemailer.createTransport({
-                service: "Gmail",
+                service: "Outlook",
                 auth: {
-                    user: "rajmajong@gmail.com",
-                    pass: process.env.GMAILPW
+                    user: "rajmajong@outlook.com",
+                    pass: "FuckYou2!"
                 }
             });
             // set mail options
             var mailOptions = {
                 to: user.email,
-                from: "rajmajong@gmail.com",
+                from: "rajmajong@outlook.com",
                 subject: "YelpCamp Password Reset",
                 text: "You are recieving this because you (or someone else) have requested the reset of your account password.\n\n" +
                     "Please click on the following link or paste this into your browser to complete the process\n\n" +
@@ -195,15 +195,15 @@ router.post('/reset/:token', function resetUserPass(req, res) {
     },
     function createMailObject(user, done) {
       var smtpTransport = nodemailer.createTransport({
-        service: 'Gmail', 
+        service: 'Outlook', 
         auth: {
-          user: 'rajmajong@gmail.com',
-          pass: process.env.GMAILPW
+          user: 'rajmajong@outlook.com',
+          pass: process.env.OUTLOOKPW
         }
       });
       var mailOptions = {
         to: user.email,
-        from: 'rajmajong@mail.com',
+        from: 'rajmajong@outlook.com',
         subject: 'Your password has been changed',
         text: 'Hello,\n\n' +
           'This is a confirmation that the password for your account ' + user.email + ' has just been changed.\n'
