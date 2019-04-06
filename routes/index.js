@@ -112,10 +112,10 @@ router.post("/forgot" , (req, res, next) => {
         function createMailObject(token, user, done) {
             // create mailer object
             var smtpTransport = nodemailer.createTransport({
-                service: "Outlook",
+                service: "gmail",
                 auth: {
-                    user: "rajmajong@outlook.com",
-                    pass: "FuckYou2!"
+                    user: "rajmajong@gmail.com",
+                    pass: process.env.GMAIL_APP_PW
                 }
             });
             // set mail options
@@ -125,7 +125,7 @@ router.post("/forgot" , (req, res, next) => {
                 subject: "YelpCamp Password Reset",
                 text: "You are recieving this because you (or someone else) have requested the reset of your account password.\n\n" +
                     "Please click on the following link or paste this into your browser to complete the process\n\n" +
-                    "http://' + req.headers.host + '/reset/' + token + '\n\n" +
+                    "http://" + req.headers.host + '/reset/' + token + "\n\n" +
                     "If you did not request this, please ignore this email and your password will remain unchanged.\n"
       };
       smtpTransport.sendMail(mailOptions, function sendMailCallback(err) {

@@ -87,8 +87,6 @@
             <!--Print out the author username-->
               <%= comment.author.username %>
           </strong>
-          <!--Show when the comment was made-->
-          <span class="pull-right"><%= moment(comment.createdAt).fromNow() %></span>
           <!--Printing the comment-->
           <p><%= comment.text %></p>
           <!--If the visitor is logged in and the owner of the comment, show the edit and delete buttons-->
