@@ -23,6 +23,10 @@
   padding: 9px;
 }
 
+#forgot {
+  padding-right: 9px;
+}
+
 #form-button {
     color: white;
     font-size: 1.2em;

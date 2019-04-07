@@ -225,27 +225,24 @@ router.post('/reset/:token', function resetUserPass(req, res) {
 });
 
 // User profiles
-router.get("/users/:id", (req, res) => {
-   User.findById(req.params.id, (err, foundUser) => {
-       if (err) {
-           req.flash("error", "Something went wrong. :(");
-           res.redirect("/");
-       }
-       if (foundUser == null || foundUser._id == null) {
-           req.flash("error", "That user no longer exists");
-           res.redirect("back");
-       }
-       else {
-          Campground.find().where('author.id').equals(foundUser._id).exec((err, campgrounds) => {
-          if (err) {
-              req.flash("error", "Something went wrong. :(");
-              res.redirect("/");
-          }
-          res.render("users/show", { user: foundUser, campgrounds: campgrounds });
-          });
-       }
-       
-   });
+router.get("/users/:id", async function(req, res) {
+    try {
+        let user = await User.findById(req.params.id);
+        
+        // if user has been deleted inform client
+        if (user == null || user._id == null) {
+            req.flash("error", "That user no longer exists");
+            res.redirect("back");
+        }
+        
+        let campgrounds = await Campground.find().where('author.id').equals(user._id).exec();
+        
+        // render template with passed in objects
+        res.render("users/show", { user: user, campgrounds: campgrounds });
+    } catch (err) {
+        req.flash("error", err.message);
+        res.redirect("back");
+    }
 });
 
 module.exports = router;
