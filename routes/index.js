@@ -4,7 +4,8 @@ var express = require("express"),
     crypto  = require("crypto"),
     nodemailer = require("nodemailer");
 var passport = require("passport");
-var User     = require("../models/user");
+var User     = require("../models/user"),
+    Campground = require("../models/campground")
 
 // Home Route
 router.get("/", (req, res) => {
@@ -221,6 +222,30 @@ router.post('/reset/:token', function resetUserPass(req, res) {
       
         res.redirect('/campgrounds');
   });
+});
+
+// User profiles
+router.get("/users/:id", (req, res) => {
+   User.findById(req.params.id, (err, foundUser) => {
+       if (err) {
+           req.flash("error", "Something went wrong. :(");
+           res.redirect("/");
+       }
+       if (foundUser == null || foundUser._id == null) {
+           req.flash("error", "That user no longer exists");
+           res.redirect("back");
+       }
+       else {
+          Campground.find().where('author.id').equals(foundUser._id).exec((err, campgrounds) => {
+          if (err) {
+              req.flash("error", "Something went wrong. :(");
+              res.redirect("/");
+          }
+          res.render("users/show", { user: foundUser, campgrounds: campgrounds });
+          });
+       }
+       
+   });
 });
 
 module.exports = router;

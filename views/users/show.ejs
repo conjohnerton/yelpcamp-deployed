@@ -1,0 +1,23 @@
+<% include ../partials/header %>
+<div class="row">
+    <div class="col-md-4">
+        <h1>Fuzzy SockParty</h1>
+        <div class="thumbnail">
+            <img src="https://previews.123rf.com/images/kurhan/kurhan1412/kurhan141200274/34363343-happy-people-.jpg" alt="user profile image">
+            <div class="caption"><a href="<%= user.email %>"><%=user.email %></a></div>
+        </div>
+        Sed ut perspiciatis unde omnis iste natus error sit voluptatem 
+        accusantium doloremque laudantium, totam rem aperiam, 
+        eaque ipsa quae ab illo inventore veritatis et quasi architecto 
+        beatae vitae dicta sunt explicabo. 
+    </div>
+    <div class="col-md-8">
+        <h3>Fuzzy's campgrounds:</h3>
+        <ul>
+            <% campgrounds.forEach((campground) => { %>
+            <li><a href="/campgrounds/<%= campground.id %>"<%= campground.name %></li>
+            <% }) %>
+        </ul>
+    </div>
+</div>
+<% include ../partials/footer %>
