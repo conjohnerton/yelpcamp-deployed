@@ -20,7 +20,48 @@ router.get("/", function (req, res) {
     var perPage = 8;
     var pageQuery = parseInt(req.query.page);
     var pageNumber = pageQuery ? pageQuery : 1;
-    Campground.find({}).skip((perPage * pageNumber) - perPage).limit(perPage).exec(function (err, allCampgrounds) {
+    if (req.query.search) {
+        const regex = new RegExp(escapeRegex(req.query.search), 'gi');
+        const regObj = {
+            $or: [
+                {name: regex}, 
+                {location: regex}, 
+                {"author.username": regex}
+            ]
+        };
+        
+        // populate page iwth campgrounds matchin regex search
+        Campground.find(regObj).skip((perPage * pageNumber) - perPage).limit(perPage).exec(function (err, allCampgrounds) {
+            if (err)
+            {
+                console.log(err);
+                res.render("landing");
+            }
+            
+            // check if there is no match in the search query
+            if (allCampgrounds.length < 1) {
+                var noMatch = "Sorry, no campgrounds match that search, please try again.";
+                req.flash("error", noMatch);
+                return res.redirect("back");
+            }
+            
+            // render page with specified post limit
+            Campground.count().exec(function (err, count) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    res.render("campgrounds/index", {
+                        campgrounds: allCampgrounds,
+                        current: pageNumber,
+                        page: "campgrounds",
+                        pages: Math.ceil(count / perPage)
+                    });
+                }
+            });
+        });
+    // run the home page without a search query
+    } else {
+        Campground.find({}).skip((perPage * pageNumber) - perPage).limit(perPage).exec(function (err, allCampgrounds) {
         if (err)
         {
             console.log(err);
@@ -39,6 +80,7 @@ router.get("/", function (req, res) {
             }
         });
     });
+    }
 });
 
 // New Route
@@ -58,7 +100,7 @@ router.post("/", middleware.isLoggedIn, function(req, res){
   var author = {
       id: req.user._id,
       username: req.user.username
-  }
+  };
   
   geocoder.geocode(req.body.location, function (err, data) {
     if (err || !data.length) {
@@ -146,5 +188,9 @@ router.delete("/:id", middleware.checkCampgroundOwnership, (req, res) => {
         }
     });
 });
+
+function escapeRegex(text) {
+    return text.replace();
+}
 
 module.exports = router;
