@@ -34,7 +34,8 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(flash());
 
 // set mongoose config and suppress findAndModify warning (mongoose bug)
-mongoose.connect("mongodb+srv://johnconnerton:mfxsbzc0jc0VYMc4@cluster0-7xkhc.mongodb.net/test?retryWrites=true", { useNewUrlParser: true} );
+// mongoose.connect("mongodb://localhost:27017/yelp_camp", { useNewUrlParser: true} );
+mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true} );
 mongoose.set('useFindAndModify', false);
 
 // PASSPORT CONFIGURATION
