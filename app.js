@@ -33,9 +33,10 @@ app.use(methodOverride("_method"));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(flash());
 
+// configure default database url
+var url = process.env.DATABASEURL || "mongodb://localhost:27017/yelp_camp";
 // set mongoose config and suppress findAndModify warning (mongoose bug)
-// mongoose.connect("mongodb://localhost:27017/yelp_camp", { useNewUrlParser: true} );
-mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true} );
+mongoose.connect(url, { useNewUrlParser: true} );
 mongoose.set('useFindAndModify', false);
 
 // PASSPORT CONFIGURATION
