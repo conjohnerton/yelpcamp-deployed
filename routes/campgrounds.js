@@ -46,7 +46,7 @@ router.get("/", function (req, res) {
             }
             
             // render page with specified post limit
-            Campground.count().exec(function (err, count) {
+            Campground.countDocuments().exec(function (err, count) {
                 if (err) {
                     console.log(err);
                 } else {
@@ -67,7 +67,7 @@ router.get("/", function (req, res) {
             console.log(err);
             res.render("landing");
         }
-        Campground.count().exec(function (err, count) {
+        Campground.countDocuments().exec(function (err, count) {
             if (err) {
                 console.log(err);
             } else {
@@ -117,11 +117,8 @@ router.post("/", middleware.isLoggedIn, function(req, res){
     Campground.create(newCampground, function(err, newlyCreated){
         if(err){
             console.log(err);
-        } else {
-            //redirect back to campgrounds page
-            console.log(newlyCreated);
-            res.redirect("/campgrounds");
         }
+        res.redirect("/campgrounds");
     });
   });
 });
@@ -190,7 +187,7 @@ router.delete("/:id", middleware.checkCampgroundOwnership, (req, res) => {
 });
 
 function escapeRegex(text) {
-    return text.replace();
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
 }
 
 module.exports = router;
