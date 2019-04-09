@@ -34,7 +34,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(flash());
 
 // set mongoose config and suppress findAndModify warning (mongoose bug)
-mongoose.connect("mongodb+srv://johnconnerton:" + process.env.MONGO_ATLAS_PW + "@cluster0-7xkhc.mongodb.net/test?retryWrites=true", { useNewUrlParser: true} );
+mongoose.connect("mongodb+srv://johnconnerton:mfxsbzc0jc0VYMc4@cluster0-7xkhc.mongodb.net/test?retryWrites=true", { useNewUrlParser: true} );
 mongoose.set('useFindAndModify', false);
 
 // PASSPORT CONFIGURATION
